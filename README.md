@@ -1,2 +1,2 @@
 # bagheera
-EMDB companion of MOWGLI
+Electron Microscopy Data Bank (EMDB) companion of MOWGLI
