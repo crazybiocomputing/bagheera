@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8" />
+	<title>TIFF test</title>
+	<script src="../../src/tiffParser/tiff.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		
+		//Globals
+		var arr;
+		var origin;
+		"use strict";
+		var prepareTIFF = function() {
+			console.log("Ready");
+			var files = document.getElementById( "tiff-file" ).files;
+			var file = files[0];
+
+			if (files.length < 1 || file.type !== 'image/tiff') {
+				return;
+			}
+
+			var reader = new FileReader();
+
+			reader.onload = function(e) {
+				var canvas = document.getElementById("tiff-image");
+				var canvasParent = canvas.parentNode;
+
+				// Load the TIFF parser.
+				var tiffParser = new TIFFParser();
+
+				console.log( tiffParser);
+				
+				
+				origin = e.target.result;
+
+				// Parse the TIFF image.
+				var tiffCanvas = tiffParser.parseTIFF(origin, canvas, null);
+				//console.log(tiffCanvas);
+
+				// Make it clear that we've loaded the image.
+				tiffCanvas.style.borderStyle = "solid";
+
+				//console.log( tiffCanvas );
+
+				// Put the parsed image in the page.
+				canvasParent.replaceChild(tiffCanvas, canvas);
+				
+				arr = tiffParser.fileDirectories;
+				console.log(arr);
+							console.log(tiffParser);
+
+				if (arr.length==1)
+				{
+					 document.getElementById("slide").style.visibility = "hidden";
+					 document.getElementById("slidevalue").style.visibility = "hidden";
+
+				}
+				document.getElementById("slide").max=arr.length-1;
+				document.getElementById("slide").value=0;
+				
+			};
+			
+			reader.readAsArrayBuffer( file );
+
+		}
+		
+		function showValue(newValue)
+		{
+			document.getElementById("slidevalue").value=newValue;
+			document.getElementById('slidevalue').innerHTML = "Image #" + document.getElementById("slidevalue").value;
+			var canvas = document.getElementById("tiff-image");
+			var canvasParent = canvas.parentNode;
+			var tiffParser = new TIFFParser();
+			var tiffCanvas = tiffParser.parseTIFF(origin, canvas, arr[newValue]);
+			canvasParent.replaceChild(tiffCanvas, canvas);
+		}
+	</script>
+</head>
+<body onload="prepareTIFF();">
+
+<form name="tiff-parser" method="post" enctype="multipart/form-data" style="margin: 10% auto auto; text-align: center;">
+
+	<input type="file" name="tiff-file" id="tiff-file" accept="image/tiff" required onchange="prepareTIFF();" />
+	<!--input type="button" name="parse" value="Parse TIFF" onclick="prepareTIFF();" /-->
+
+</form>
+
+<canvas id="tiff-image" style="display: block; max-width: 95%; margin: 2em auto; border: 1px dashed magenta; padding: 0px; background-color: #FFEEFF;"></canvas>
+<center><input id="slide" type="range"  min="0" max="100" onchange="showValue(this.value)"/><br>
+<label id="slidevalue" for="value">Image: 0</label>
+</center>
+
+</body>
+</html>
