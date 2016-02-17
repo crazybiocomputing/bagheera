@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,7 +32,6 @@
 				// Load the TIFF parser.
 				var tiffParser = new TIFFParser();
 
-				console.log( tiffParser);
 				
 				
 				origin = e.target.result;
@@ -62,7 +62,8 @@
 				document.getElementById("slide").value=0;
 				
 			};
-			
+							console.log( file);
+
 			reader.readAsArrayBuffer( file );
 
 		}
@@ -77,6 +78,20 @@
 			var tiffCanvas = tiffParser.parseTIFF(origin, canvas, arr[newValue]);
 			canvasParent.replaceChild(tiffCanvas, canvas);
 		}
+		var i =0;                     //  set your counter to 1
+		function play () {           //  create a loop function
+		   setTimeout(function () {
+		   document.getElementById("slide").value=i
+ 
+		      showValue(i);          //  your code here
+		      i++;                     //  increment the counter
+		      if (i < arr.length) {            //  if the counter < 10, call the loop function
+		         play();             //  ..  again which will trigger another 
+		      }                        //  ..  setTimeout()
+		   }, 250)
+		}
+
+
 	</script>
 </head>
 <body onload="prepareTIFF();">
@@ -84,7 +99,7 @@
 <form name="tiff-parser" method="post" enctype="multipart/form-data" style="margin: 10% auto auto; text-align: center;">
 
 	<input type="file" name="tiff-file" id="tiff-file" accept="image/tiff" required onchange="prepareTIFF();" />
-	<!--input type="button" name="parse" value="Parse TIFF" onclick="prepareTIFF();" /-->
+	<input type="button" name="parse" value="Play" onclick="play();" >
 
 </form>
 
