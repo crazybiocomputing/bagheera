@@ -16,6 +16,7 @@
 		"use strict";
 		var prepareTIFF = function(f) {
 			console.log("Ready");
+
 			if (f==undefined)
 			{
 				var files = document.getElementById( "tiff-file" ).files;
@@ -63,6 +64,15 @@
 				{
 					 document.getElementById("slide").style.visibility = "hidden";
 					 document.getElementById("slidevalue").style.visibility = "hidden";
+					document.getElementById("play").style.visibility = "hidden";
+
+
+				}
+				else
+				{
+					document.getElementById("slide").style.visibility = "visible";
+					 document.getElementById("slidevalue").style.visibility = "visible";
+					 document.getElementById("play").style.visibility = "visible";
 
 				}
 				document.getElementById("slide").max=arr.length-1;
@@ -79,41 +89,41 @@
 		{
 			document.getElementById("slidevalue").value=newValue;
 			document.getElementById('slidevalue').innerHTML = "Image #" + document.getElementById("slidevalue").value;
-			var canvas = document.getElementById("drop_zone");
+			var canvas = document.getElementById("tiff-image");
 			var canvasParent = canvas.parentNode;
 			var tiffParser = new TIFFParser();
 			var tiffCanvas = tiffParser.parseTIFF(origin, canvas, arr[newValue]);
 			canvasParent.replaceChild(tiffCanvas, canvas);
 		}
-		var i =0; 
-		function play () {  
-			   setTimeout(function () {
-			   document.getElementById("slide").value=i
-	 
-			      showValue(i);          
-			      i++;                     
-			      if (i < arr.length) {            
-			         play();             
-			      }                        
-			   }, 250);
-			} 
+		var i =0;                     //  set your counter to 1
+		function play () {           //  create a loop function
+		   setTimeout(function () {
+		   document.getElementById("slide").value=i
+ 
+		      showValue(i);          //  your code here
+		      i++;                     //  increment the counter
+		      if (i < arr.length) {            //  if the counter < 10, call the loop function
+		         play();             //  ..  again which will trigger another 
+		      }                        //  ..  setTimeout()
+		   }, 250)
+		}
 		function playAll()
 		{
 			play();
-			i=0;
-			document.getElementById("slide").value=i
-	 		showValue(i);
+			i=0
+			document.getElementById("slide").value=0;
+			showValue(i);
 		}
-
 
 	</script>
 </head>
-<body onload="prepareTIFF();" >
+<body onload="prepareTIFF();">
 <div id="drop_zone">
+
 <form name="tiff-parser" method="post" enctype="multipart/form-data" style="margin: 10% auto auto; text-align: center;">
 
 	<input type="file" name="tiff-file" id="tiff-file" accept="image/tiff" required onchange="prepareTIFF();" />
-	<input type="button" name="parse" value="Play" onclick="playAll();" >
+	<input type="button" name="play" id="play" value="Play" onclick="playAll();" >
 
 </form>
 
@@ -126,20 +136,16 @@
   function handleFileSelect(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-
     var files = evt.dataTransfer.files; // FileList object.
-
     // files is a FileList of File objects. List some properties.
     var output = [];
     prepareTIFF(files);
   }
-
   function handleDragOver(evt) {
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
   }
-
   // Setup the dnd listeners.
   var dropZone = document.getElementById('drop_zone');
   dropZone.addEventListener('dragover', handleDragOver, false);
