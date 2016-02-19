@@ -23,6 +23,14 @@
 					if(typeRadio.type[i].checked==true)
 						type = typeRadio.type[i].value ;
 
+				//we retrieve the endianness from the form.
+				var endianness ;
+
+				var endiannessRadio = document.forms.endianness ;
+				for(var i = 0 ; i < endiannessRadio.length ; i++)
+					if(endiannessRadio.endianness[i].checked==true)
+						endianness = (endiannessRadio.endianness[i].value == "little") ? true : false ;
+
 				//we retrieve the file
 				var file = document.getElementById('file-input').files[0];
 				if(!file) {
@@ -31,7 +39,7 @@
 				}
 
 				//we read it
-				readSpiderFile(file, type, callback) ;
+				readSpiderFile(file, type, callback, endianness) ;
 			}
 
 			//Define the actions to take after reading the file, used by readSpiderFile
@@ -66,9 +74,16 @@
 
 	Sélectionner le fichier SPIDER : <input type="file" id="file-input" accept="image/spi" /><br>
 
+	Sélectionner le type de fichier :
 	<form name="type">
-		<input type="radio" name="type" value="image" checked> Ouvrir une seule image SPIDER<br>
-		<input type="radio" name="type" value="stack"> Ouvrir une pile d'images SPIDER<br>
+		<input type="radio" name="type" value="image" checked>Ouvrir une seule image SPIDER<br>
+		<input type="radio" name="type" value="stack">Ouvrir une pile d'images SPIDER<br>
+	</form>	
+
+	Sélectionner l'endianness :
+	<form name="endianness">
+		<input type="radio" name="endianness" value="little" checked>Litlle indian<br>
+		<input type="radio" name="endianness" value="big">Big indian<br>
 	</form>
 
   	<input type="button" onclick="readFile()" value="Valider">
