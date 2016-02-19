@@ -28,15 +28,6 @@ TIFFParser.prototype = {
 		return this.littleEndian;
 	},
 
-	hasTowel: function () {
-		// Check for towel.
-		if (this.getBytes(2, 2) !== 42) {
-			throw RangeError("You forgot your towel!");
-			return false;
-		}
-
-		return true;
-	},
 
 	getFieldTagName: function (fieldTag) {
 		// See: http://www.digitizationguidelines.gov/guidelines/TIFF_Metadata_Final.pdf
@@ -301,11 +292,6 @@ TIFFParser.prototype = {
 		return fieldValues;
 	},
 
-	clampColorSample: function(colorSample, bitsPerSample) {
-		var multiplier = Math.pow(2, 0);
-
-		return Math.floor((colorSample * multiplier) + (multiplier - 1));
-	},
 
 	makeRGBAFillValue: function(r, g, b, a) {
 		if(typeof a === 'undefined') {
@@ -337,7 +323,6 @@ TIFFParser.prototype = {
 		this.fileDirectories.push( tiffFields );
 
 		var nextIFDByteOffset = this.getBytes(4, i);
-						console.log("r"+entryCount);
 
 		if (nextIFDByteOffset === 0x00000000) {
 			return this.fileDirectories;
@@ -356,9 +341,7 @@ TIFFParser.prototype = {
 
 		this.littleEndian = this.isLittleEndian(this.tiffDataView);
 
-		if (!this.hasTowel(this.tiffDataView, this.littleEndian)) {
-			return;
-		}
+		
 
 		if(newone == null){
 			
@@ -656,14 +639,14 @@ TIFFParser.prototype = {
 							// Bilevel or Grayscale
 							// BlackIsZero
 							case 1:
-								red = green = blue = this.clampColorSample(pixelSamples[0], sampleProperties[0].bitsPerSample);
+								red = green = blue = pixelSamples[0];
 							break;
 
 							// RGB Full Color
 							case 2:
-								red = this.clampColorSample(pixelSamples[0], sampleProperties[0].bitsPerSample);
-								green = this.clampColorSample(pixelSamples[1], sampleProperties[1].bitsPerSample);
-								blue = this.clampColorSample(pixelSamples[2], sampleProperties[2].bitsPerSample);
+								red = pixelSamples[0];
+								green = pixelSamples[1];
+								blue = pixelSamples[2];
 							break;
 
 							// RGB Color Palette
@@ -674,9 +657,9 @@ TIFFParser.prototype = {
 
 								var colorMapIndex = pixelSamples[0];
 
-								red = this.clampColorSample(colorMapValues[colorMapIndex], 16);
-								green = this.clampColorSample(colorMapValues[colorMapSampleSize + colorMapIndex], 16);
-								blue = this.clampColorSample(colorMapValues[(2 * colorMapSampleSize) + colorMapIndex], 16);
+								red = colorMapValues[colorMapIndex];
+								green = colorMapValues[colorMapSampleSize + colorMapIndex];
+								blue = colorMapValues[(2 * colorMapSampleSize) + colorMapIndex];
 							break;
 
 							// Transparency mask
@@ -717,7 +700,6 @@ TIFFParser.prototype = {
 /*		for (var i = 0, numFileDirectories = this.fileDirectories.length; i < numFileDirectories; i++) {
 			// Stuff
 		}*/
-		console.log(this.fileDirectories.length)
 		return this.canvas;
 	},
 }
