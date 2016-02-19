@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<style>
+		</style> 
+
+		<meta charset="utf8">
+		<title>Opening a SPIDER file</title>
+
+		<script src="./../../src/spiderParser/spiderParser.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			//we will stock here the pixels array
+			var fileContents = [] ;
+
+			//we read the selected file
+			function readFile() {
+				//we retrieve the type from the form.
+				var type ;
+
+				var typeRadio = document.forms.type ;
+				for(var i = 0 ; i < typeRadio.length ; i++)
+					if(typeRadio.type[i].checked==true)
+						type = typeRadio.type[i].value ;
+
+				//we retrieve the file
+				var file = document.getElementById('file-input').files[0];
+				if(!file) {
+					alert('aucun fichier Sélectionner') ;
+					return ;
+				}
+
+				//we read it
+				readSpiderFile(file, type, callback) ;
+			}
+
+			//Define the actions to take after reading the file, used by readSpiderFile
+			function callback(imagePix, type) {
+				//we save the pixels array
+				fileContents = imagePix ;
+
+				//we display an image
+				if(type === 'stack') {
+					displayImage(fileContents[0], document.getElementById("myCanvas")) ;
+					var slide = document.getElementById("slide") ;
+					slide.min = 1 ;
+					slide.max = fileContents.length ;
+				}
+				else
+					displayImage(fileContents, document.getElementById("myCanvas")) ;
+			}
+
+			//Action to do when the scrollbar value is changed : update the image in the case of a stack.
+			function updateImage(newValue){
+				//we retrieve the image number from the scroll bar
+				var slidevalue = document.getElementById("slidevalue") ;
+				slidevalue.value = newValue;
+
+				//we update the image number in the scrolbar label
+				slidevalue.innerHTML = "Image : " + slidevalue.value ;
+				//we display the new image
+				displayImage(fileContents[slidevalue.value - 1] , document.getElementById("myCanvas")) ;
+			}
+		</script>
+	</head>
+
+	Sélectionner le fichier SPIDER : <input type="file" id="file-input" accept="image/spi" /><br>
+
+	<form name="type">
+		<input type="radio" name="type" value="image" checked> Ouvrir une seule image SPIDER<br>
+		<input type="radio" name="type" value="stack"> Ouvrir une pile d'images SPIDER<br>
+	</form>
+
+  	<input type="button" onclick="readFile()" value="Valider">
+
+	<h3>Displaying image</h3>
+	<canvas id="myCanvas" width="0" height="0"></canvas> 
+
+	<center><input id="slide" type="range"  min="0" max="0" step="1" onchange="updateImage(this.value)"/><br>
+	<label id="slidevalue" for="value">Image : 1</label>
+	</center>
+
+</html>
