@@ -9,7 +9,7 @@ const defaultHeaderSize = 256 ;
  * @param {function} callback The function to execute after reading the file, it take two parameters :
  *		- imagePix : the pixels of the image(s), it is a 2d array if the type is 'image', if the type is 'stack' it is a 3d array.
  *		- type : the type of the file.
- * @param {} endianness Define the endianness, big endian if the value is undefined or flase, little indian otherwise.
+ * @param {} endianness Define the endianness, big endian if the value is undefined or false, little indian otherwise.
  */
 function readSpiderFile(file, type, callback, endianness) {
 	try {
