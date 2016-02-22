@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>Gunzipping binary gzipped string</title>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="./../../pako/dist/pako.js"></script>
+   <script type="text/javascript" src="./../../src/mrc_gunzip/gunzip.js"></script>
+  <script type="text/javascript">
+  /*
+  * @param {Blob} file File to read from uploaded by user
+   */
+  function get(){
+var file = document.getElementById('file-input').files[0];
+
+        if(!file) {
+          alert('aucun fichier Sélectionner') ;
+          return ;
+        }
+       
+       readFile(file)
+      }
+           
+  </script>
+</head>
+<body>
+  Sélectionner le fichier SPIDER : <input type="file" id="file-input" accept="gunzip/gzip" /><br>
+ <input type="button" onclick="get()" value="unzip">
+
+
+    Open up the developer console.
+</body>
+</html>
