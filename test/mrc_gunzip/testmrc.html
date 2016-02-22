@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta charset="utf8">
+		<title>Opening a MRC file</title>
+		<script  type="text/javascript" src="./../../src/mrc_gunzip/MRCParser.js"></script>
+
+		<script type="text/javascript">
+			function readFile(){
+			    var fileContents = []
+			    
+			    var endianness;
+				var endiannessRadio = document.forms.endianness ;
+				for(var i = 0 ; i < endiannessRadio.length ; i++)
+					if(endiannessRadio.endianness[i].checked==true)
+						endianness = (endiannessRadio.endianness[i].value == "little") ? true : false ;
+			    
+			    // We retrieve the file
+			    var file = document.getElementById('file-input').files[0];
+			    if(!file) {
+			    	alert('aucun fichier Sélectionner') ;
+			    	return ;
+		    	}
+		    	
+                readMRCFile(file, callback, endianness);
+		    }
+		    
+		    
+		    function callback(tabImage3D) {
+				//we save the pixels array
+				fileContents = tabImage3D ;
+                var nZ = fileContents.length;
+				//we display an image
+				if(nZ != 1) {
+					displayImage(fileContents[0], document.getElementById("canvas")) ;
+					var slide = document.getElementById("slide") ;
+					slide.min = 1 ;
+					slide.max = fileContents.length ;
+				}
+				else
+					displayImage(fileContents, document.getElementById("canvas")) ;
+			}
+		    
+		    function updateImage(newValue){
+				//we retrieve the image number from the scroll bar
+				var slidevalue = document.getElementById("slidevalue") ;
+				slidevalue.value = newValue;
+
+				//we update the image number in the scrolbar label
+				slidevalue.innerHTML = "Image : " + slidevalue.value ;
+				//we display the new image
+				displayImage(fileContents[slidevalue.value - 1], document.getElementById("canvas")) ;
+			}
+		</script>
+	</head>
+	<body>
+		Sélectionner le fichier MRC : <input type="file" id="file-input" accept="image/mrc" /><br>
+		
+	Sélectionner l'endianness :
+	<form name="endianness">
+		<input type="radio" name="endianness" value="little" > Litlle indian<br>
+		<input type="radio" name="endianness" value="big" checked> Big indian<br>
+	</form>
+	
+		<input type="button" onclick="readFile()" value="Valider">
+		
+	<center>
+		<canvas id="canvas" width="0" height="0"> </canvas>
+	</center>
+	<center><input id="slide" type="range"  min="0" max="0" step="1" onchange="updateImage(this.value)"/><br>
+	<label id="slidevalue" for="value">Image : 1</label>
+	</center>
+
+</html>
