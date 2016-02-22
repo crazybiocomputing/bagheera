@@ -1,0 +1,114 @@
+body
+{
+    background:url("fond.jpg");
+    font-family: "Times New Roman", Arial, serif;
+    color: #181818; 
+    background-color: blue;
+}
+
+em
+{
+    color:red
+}
+
+#bloc_page
+{
+    width: 900px;
+    margin: auto;
+
+}
+
+#titre_principal
+{
+    text-align: center;
+}
+header h1
+{
+
+    font-family: "Times New Roman", Arial, serif;
+    font-size: 2.5em;
+    font-weight: normal;
+}
+
+/*Navigation*/
+nav
+{
+    text-align: center;
+    width: 740;
+}
+
+nav ul
+{
+    list-style-type:none;
+}
+
+nav li
+{
+    display: inline;
+    margin-right: 15px;
+}
+
+nav a
+{
+    font-size: 1.3em;
+    color: #181818;
+    padding-bottom: 3px; /*marge intérieure*/
+    text-decoration: none;
+    font-family: "Times New Roman", Arial, serif;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/*Survol des liens*/
+nav a:hover
+{
+    text-decoration: none;
+    color: red;
+    font-style: italic;
+}
+
+/*Lien déjà visité*/
+nav a:visited
+{
+    color: grey;
+}
+
+/*Corps*/
+
+ #two
+{
+   text-align:center;
+    width: 400px;
+    height: 300px;
+    text-align: center;
+    border-width:2px 2px 2px 2px;
+    border-style:solid;
+    border-color:black;
+    padding:0 10px;
+}
+
+#three
+{
+    float:right;
+    width: 400px;
+    height: 300px;
+    text-align: center;
+    border-width:2px 2px 2px 2px;
+    border-style:solid;
+    border-color:black;
+    padding:0 10px;
+}
+
+#video
+{
+    text-align: center;
+    vertical-align: middle;
+    top:400px;
+    left:0px;
+}
+.scroll{
+    width: 200px;
+    height: 200px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
